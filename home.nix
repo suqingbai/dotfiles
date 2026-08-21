@@ -19,6 +19,7 @@ in
     jq        # json on the command line
     lazygit
     neovim
+    nodejs   # latest stable (LTS) Node.js
     # WezTerm with nixGL hardware acceleration wrapper
     (pkgs.writeShellScriptBin "wezterm" ''
        exec ${nixgl-intel}/bin/nixGLIntel ${pkgs.wezterm}/bin/wezterm "$@"
