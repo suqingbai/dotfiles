@@ -1,5 +1,5 @@
 
--- save by pressing Escape
+-- save by pressing Escape (disabled: not wanted)
 -- vim.keymap.set('n', '<Esc>', ':w<CR>', { desc = 'Save' })
 -- select all
 vim.keymap.set('n', '<C-a>', 'ggVG', { desc = 'Select All' })

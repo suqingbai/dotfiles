@@ -77,7 +77,7 @@ in
       m = "git switch main";
       cc = "claude --dangerously-skip-permissions";
       co = "codex --full-auto";
-      wez="wezterm & disown && exit";
+      wez = "wezterm & disown && exit";
     };
   };
 
