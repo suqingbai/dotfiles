@@ -66,6 +66,14 @@ in
     enable = true;
     autosuggestion.enable = true;      # ghost text from history
     syntaxHighlighting.enable = true;  # commands turn green when valid
+    # Puts Nix-installed packages' bin dirs on PATH for every zsh invocation
+    # (interactive, non-interactive, login or not) rather than relying on
+    # the system-level /etc/zsh/zshrc nix-daemon.sh sourcing block.
+    envExtra = ''
+      if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+          . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+      fi
+    '';
     initContent = ''
       bindkey '^f' autosuggest-accept
     '';
