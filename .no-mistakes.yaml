@@ -1,0 +1,9 @@
+# no-mistakes repository configuration
+
+# This is a personal dotfiles repo with no CI workflows configured (no
+# .github/workflows/). Without this declaration, the pipeline's ci step waits
+# up to its configured ci_timeout (default 168h) for checks that will never
+# register. This tells no-mistakes that a zero-check state is expected here,
+# so a PR with no checks reaches checks-passed immediately instead of
+# timing out.
+no_ci: true
