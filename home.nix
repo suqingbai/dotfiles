@@ -19,9 +19,15 @@ in
     jq        # json on the command line
     lazygit
     neovim
+    nodejs
+    gh        # GitHub CLI
     # WezTerm with nixGL hardware acceleration wrapper
     (pkgs.writeShellScriptBin "wezterm" ''
        exec ${nixgl-intel}/bin/nixGLIntel ${pkgs.wezterm}/bin/wezterm "$@"
+    '')
+    # Wrapper for the skills CLI
+    (pkgs.writeShellScriptBin "skills" ''
+       exec ${pkgs.nodejs}/bin/npx -y skills "$@"
     '')
     claude-code
     # the font everything renders in
@@ -29,12 +35,45 @@ in
     herdr-pkg
   ];
   fonts.fontconfig.enable = true;
-  home.sessionVariables.EDITOR = "nvim";
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    # Writable target for `npm install -g`: Nix's own nodejs is read-only,
+    # so global npm packages (CLI tools installed outside Nix) go here instead.
+    NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
+  };
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.npm-global/bin"
+    "${config.home.homeDirectory}/.local/bin"
+  ];
+
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      ll = "ls -alF";
+      la = "ls -A";
+      l = "ls -CF";
+      wez = "wezterm & disown && exit";
+    };
+    initExtra = ''
+      alias ls='ls --color=auto'
+      alias grep='grep --color=auto'
+      alias fgrep='fgrep --color=auto'
+      alias egrep='egrep --color=auto'
+    '';
+  };
 
   programs.zsh = {
     enable = true;
     autosuggestion.enable = true;      # ghost text from history
     syntaxHighlighting.enable = true;  # commands turn green when valid
+    # Puts Nix-installed packages' bin dirs on PATH for every zsh invocation
+    # (interactive, non-interactive, login or not) rather than relying on
+    # the system-level /etc/zsh/zshrc nix-daemon.sh sourcing block.
+    envExtra = ''
+      if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+          . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+      fi
+    '';
     initContent = ''
       bindkey '^f' autosuggest-accept
     '';
@@ -46,6 +85,7 @@ in
       m = "git switch main";
       cc = "claude --dangerously-skip-permissions";
       co = "codex --full-auto";
+      wez = "wezterm & disown && exit";
     };
   };
 

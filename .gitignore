@@ -1,0 +1,6 @@
+.idea/
+home/.config/herdr/.plugins.lock
+home/.config/herdr/herdr-client.log
+home/.config/herdr/herdr-server.log
+home/.config/herdr/release-notes.json
+home/.config/herdr/session.json
